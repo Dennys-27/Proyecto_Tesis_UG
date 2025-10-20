@@ -1,0 +1,340 @@
+/* estilos.css — Hoja de estilo unificada y reutilizable */
+
+/* -------------------------
+   🎨 Variables globales
+   ------------------------- */
+:root{
+  --color-primary: #3b57f9;
+  --color-primary-dark: #2d44c3;
+  --color-bg: #1e1e2f;
+  --color-surface: rgba(255,255,255,0.06);
+  --color-surface-2: rgba(255,255,255,0.03);
+  --color-text: #e6f3ff;
+  --muted: rgba(255,255,255,0.7);
+  --accent: #cce0ff;
+  --danger: #ff6b6b;
+  --radius: 12px;
+  --card-radius: 16px;
+  --shadow-soft: 0 6px 24px rgba(0,0,0,0.45);
+  --shadow-sm: 0 4px 12px rgba(0,0,0,0.35);
+  --transition: 280ms cubic-bezier(.2,.9,.2,1);
+  --btn-radius: 10px;
+  --ui-gap: 12px;
+  --max-card-width: 520px;
+  --particle-color: rgba(59,87,249,0.72);
+}
+
+/* -------------------------
+   Reset / Base
+   ------------------------- */
+* { box-sizing: border-box; }
+html,body {
+  height: 100%;
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* -------------------------
+   Forzar centrado del .login-card (solo CSS)
+   ------------------------- */
+html, body { height: 100%; box-sizing: border-box; }
+body {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 100vh !important;
+  padding: 24px !important;
+  overflow: hidden;
+}
+
+/* -------------------------
+   Background canvas (particles)
+   ------------------------- */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: var(--color-bg);
+}
+
+/* -------------------------
+   Card / Surface (reusable)
+   ------------------------- */
+.card.login-card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--max-card-width);
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-soft);
+  transition: box-shadow var(--transition), transform var(--transition);
+  margin: 0 auto !important;
+  box-sizing: border-box;
+}
+
+/* subtle hover (desktop) */
+@media (hover: hover) {
+  .card.login-card:hover {
+    box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+    transform: translateY(-3px);
+  }
+}
+
+/* -------------------------
+   Header inside card (logo + title)
+   ------------------------- */
+.login-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-gap);
+  margin-bottom: 1.25rem;
+}
+
+.login-header .logo img {
+  max-width: 84px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.login-header .separator {
+  width: 1px;
+  height: 64px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+}
+
+.login-header .login-title {
+  font-weight: 600;
+  font-size: 1.02rem;
+  line-height: 1.15;
+  color: var(--accent);
+  margin: 0;
+}
+
+/* alternative logo text */
+.logo-text h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0;
+}
+
+/* -------------------------
+   Forms / Inputs (reusable)
+   ------------------------- */
+.form-group { margin-bottom: 1rem; }
+
+.form-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: rgba(255,255,255,0.92);
+  font-weight: 600;
+  font-size: .92rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.58rem 0.9rem;
+  font-size: .95rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: calc(var(--radius) - 2px);
+  transition: box-shadow var(--transition), border-color var(--transition), background var(--transition);
+  outline: none;
+}
+
+.form-control::placeholder { color: var(--muted); }
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 20px rgba(59,87,249,0.14);
+  background: rgba(255,255,255,0.06);
+}
+
+/* small helper text */
+.form-text { font-size: .85rem; color: rgba(255,255,255,0.72); }
+.form-text.error { color: #ffb3b3; }
+
+/* shake helper class */
+.shake { animation: shake 420ms; }
+@keyframes shake {
+  10% { transform: translateX(-6px); }
+  30% { transform: translateX(6px); }
+  50% { transform: translateX(-4px); }
+  70% { transform: translateX(4px); }
+  90% { transform: translateX(-2px); }
+}
+
+/* -------------------------
+   Buttons (reusable)
+   ------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.56rem 0.9rem;
+  border-radius: var(--btn-radius);
+  font-weight: 600;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  border: none;
+}
+
+/* Primary */
+.btn-login {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 6px 22px rgba(59,87,249,0.18);
+}
+.btn-login:hover { transform: translateY(-3px); background: var(--color-primary-dark); }
+
+/* Secondary */
+.btn-register {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.btn-register:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+/* full width helper */
+.w-full { width: 100%; }
+
+/* button groups */
+.d-flex.gap-2 { display:flex; gap:12px; }
+.d-flex.gap-2 .flex-fill { flex:1; }
+
+/* -------------------------
+   Links
+   ------------------------- */
+a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--color-primary); }
+.text-center { text-align:center; }
+
+/* -------------------------
+   Password toggle (eye) — reusable
+   ------------------------- */
+.pw-group { position: relative; }
+.pw-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 6px;
+  display: inline-flex;
+  align-items:center;
+  justify-content:center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.95);
+  transition: transform 140ms;
+}
+.pw-toggle:active { transform: translateY(-50%) scale(.96); }
+.pw-toggle svg { width:20px; height:20px; display:block; }
+
+/* -------------------------
+   Animated envelope & burst (visual effects)
+   ------------------------- */
+#correoAnimado {
+  position: absolute;
+  z-index: 9999;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  will-change: transform, opacity;
+  opacity: 0;
+  transform-origin: center center;
+}
+
+.burst { position: absolute; pointer-events: none; z-index: 10000; }
+.burst .dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--particle-color);
+  opacity: .95;
+  transform: scale(.12);
+  transition: transform 420ms cubic-bezier(.2,.9,.2,1), opacity 420ms;
+}
+
+/* -------------------------
+   Modal visual tweaks (reusable)
+   ------------------------- */
+.modal-content {
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--color-surface), var(--color-surface-2));
+  border: 1px solid rgba(255,255,255,0.05);
+  backdrop-filter: blur(6px);
+}
+.modal-body { padding: 1.6rem; text-align:center; }
+#loadingSpinner p { margin: .5rem 0 0; color: #9fb7ff; }
+
+#successMessage {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap: 12px;
+  text-align: center;
+}
+.success-envelope { width:56px; height:56px; }
+
+/* -------------------------
+   Accessibility helpers
+   ------------------------- */
+.visually-hidden { position:absolute !important; height:1px; width:1px; overflow:hidden; clip:rect(1px,1px,1px,1px); white-space:nowrap; }
+
+/* -------------------------
+   Responsive adjustments
+   ------------------------- */
+@media (max-width: 720px) {
+  :root { --max-card-width: 520px; }
+  .login-header .separator { display:block; height:52px; }
+}
+
+@media (max-width: 420px) {
+  .login-card { padding: 1.6rem; border-radius: 12px; }
+  .login-header .logo img { max-width: 64px; }
+  .login-header .separator { display: none; }
+  #correoAnimado { width: 36px; height: 36px; }
+}
+
+/* -------------------------
+   Utility helpers
+   ------------------------- */
+.mt-2 { margin-top: .5rem; }
+.mb-2 { margin-bottom: .5rem; }
+.text-success { color: #bff0c9; }
+.text-danger { color: var(--danger); }
+.small { font-size: .85rem; color: var(--muted); }
+
+/* Ensure .login-card ignores any stray absolute positioning etc. */
+.login-card {
+  margin: 0 auto !important;
+  position: relative !important;
+  left: auto !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: var(--max-card-width) !important;
+  z-index: 2 !important;
+  box-sizing: border-box !important;
+}
+
+/* End of estilos.css */
