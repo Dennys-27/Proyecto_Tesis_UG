@@ -9,6 +9,7 @@
 
 </head>
 <body>
+  <!-- Se enfoca en la recuperacion de contraseñas de usuarios -->
 
   <div class="card shadow login-card p-4">
     <div class="d-flex justify-content-between align-items-center mb-4 login-header">
