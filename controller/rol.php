@@ -50,4 +50,23 @@ switch ($_GET["op"]) {
         );
         echo json_encode($results);
         break;
+
+    case "crear":
+        $datos = $rol->crear_rol($_POST);
+        echo json_encode($datos);
+        break;
+
+    case "editar":
+        $datos = $rol->get_rol_by_id($_POST["id_rol"]);
+        echo json_encode($datos);
+        break;  
+
+    case "actualizar":
+        $datos = $rol->actualizar_rol($_POST);
+        echo json_encode($datos);
+        break;  
+    case "eliminar":
+        $datos = $rol->eliminar_rol($_POST["id_rol"]);      
+        echo json_encode($datos);
+        break;
 }

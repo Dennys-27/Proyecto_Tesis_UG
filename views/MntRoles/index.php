@@ -176,8 +176,8 @@ if ($datos["acceso"] == 1) {
                 </footer>
 
                 <?php require_once("mantenimiento.php"); ?>
-                <script src="../assets/js/dashboard/create-proyecto.js"></script>
-                <script src="../assets/js/alertas.js"></script>
+                <script src="../../assets/js/dashboard/create-proyecto.js"></script>
+                <script src="../../assets/js/alertas.js"></script>
                 <!-- Quill -->
                 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
                 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>

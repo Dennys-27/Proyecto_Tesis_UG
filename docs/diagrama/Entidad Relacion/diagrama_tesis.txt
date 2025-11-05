@@ -1,0 +1,144 @@
+// =====================================================
+// ESQUEMA DE BASE DE DATOS: Sistema de Flujo de Trabajo Académico
+// =====================================================
+// Sintaxis DBML: https://dbml.dbdiagram.io/docs
+
+// ===== ROLES Y USUARIOS =====
+
+Table Rol {
+  id integer [pk]                         // Clave primaria
+  nombre varchar                          // Nombre del rol (Administrador, Director, Docente, Estudiante)
+  descripcion varchar                     // Descripción del rol
+  fecha_creacion timestamp                // Fecha de creación
+  usuario_creacion timestamp              // Usuario que creó el registro
+  usuario_modificacion timestamp          // Usuario que modificó el registro
+  usuario_eliminacion timestamp           // Usuario que eliminó el registro
+  fecha_eliminacion timestamp             // Fecha de eliminación
+  host_modificacion timestamp             // Host que modificó
+  host_eliminacion timestamp              // Host que eliminó
+  activo bit                              // Estado activo/inactivo
+}
+
+Table Usuario {
+  id integer [pk]                         // Clave primaria
+  nombre_usuario varchar                  // Nombre de usuario
+  nombre_completo varchar                 // Nombre completo
+  correo varchar                          // Correo electrónico
+  contraseña varchar                      // Contraseña
+  telefono varchar                        // Teléfono
+  dni varchar                             // Documento de identidad
+  imagen varchar                          // Imagen de perfil o ruta
+  rol_id integer [ref: > Rol.id]          // Relación con la tabla Rol
+  fecha_creacion timestamp
+  usuario_creacion timestamp
+  usuario_modificacion timestamp
+  usuario_eliminacion timestamp
+  fecha_eliminacion timestamp
+  host_modificacion timestamp
+  host_eliminacion timestamp
+  activo bit
+}
+
+// ===== MENÚS Y PERMISOS =====
+
+Table Menu {
+  id integer [pk]
+  nombre varchar                          // Nombre del menú
+  icono varchar                           // Ícono del menú
+  enlace varchar                          // Enlace o ruta
+  etiqueta varchar                        // Etiqueta o badge opcional
+  identificador_menu varchar              // Identificador interno
+  activo bit
+}
+
+Table MenuRol {
+  id_menu integer [ref: > Menu.id]        // Clave foránea a Menu
+  id_rol integer [ref: > Rol.id]          // Clave foránea a Rol
+}
+
+// ===== GESTIÓN DE PROYECTOS =====
+
+Table Proyecto {
+  id integer [pk]
+  titulo varchar                          // Título del proyecto
+  descripcion text                        // Descripción del proyecto
+  docente_id integer [ref: > Usuario.id]  // Docente que crea el proyecto
+  fecha_inicio date                       // Fecha de inicio
+  fecha_fin date                          // Fecha de finalización
+  fecha_creacion timestamp
+  usuario_creacion timestamp
+  activo bit
+}
+
+// ===== GRUPOS DENTRO DEL PROYECTO =====
+
+Table GrupoProyecto {
+  id integer [pk]
+  proyecto_id integer [ref: > Proyecto.id] // Relación con Proyecto
+  nombre varchar                           // Nombre del grupo
+  descripcion text                         // Descripción o propósito del grupo
+  fecha_creacion timestamp
+  activo bit
+}
+
+// ===== ASIGNACIÓN DE USUARIOS A GRUPOS =====
+
+Table MiembroGrupo {
+  id integer [pk]
+  grupo_id integer [ref: > GrupoProyecto.id] // Relación con GrupoProyecto
+  usuario_id integer [ref: > Usuario.id]     // Relación con Usuario
+  fecha_asignacion timestamp
+  rol_en_grupo varchar                       // Ejemplo: “Líder”, “Integrante”
+  activo bit
+}
+
+// ===== CRONOGRAMA DE ACTIVIDADES =====
+
+Table Cronograma {
+  id integer [pk]
+  proyecto_id integer [ref: > Proyecto.id]   // Relación con Proyecto
+  titulo varchar                             // Título de la actividad
+  descripcion text                           // Detalle de la actividad
+  fecha_inicio date
+  fecha_fin date
+  estado varchar                             // Ejemplo: Pendiente, En Progreso, Completado
+  fecha_creacion timestamp
+  activo bit
+}
+
+// ===== CONTROL DE DOCUMENTOS Y GALERÍA =====
+
+Table Documento {
+  id integer [pk]
+  proyecto_id integer [ref: > Proyecto.id]   // Relación con Proyecto
+  grupo_id integer [ref: > GrupoProyecto.id] // Relación con GrupoProyecto
+  usuario_id integer [ref: > Usuario.id]     // Usuario que sube el archivo
+  nombre_archivo varchar                     // Nombre del archivo
+  ruta_archivo varchar                       // Ruta o ubicación
+  tipo_archivo varchar                       // Tipo (pdf, docx, jpg, etc.)
+  fecha_subida timestamp
+  descripcion text
+  activo bit
+}
+
+// ===== COMENTARIOS O NOTIFICACIONES =====
+
+Table Comentario {
+  id integer [pk]
+  proyecto_id integer [ref: > Proyecto.id]
+  usuario_id integer [ref: > Usuario.id]
+  mensaje text
+  fecha_creacion timestamp
+  activo bit
+}
+
+// ===== CONTROL DEL DIRECTOR DE CARRERA =====
+
+Table RegistroDirector {
+  id integer [pk]
+  director_id integer [ref: > Usuario.id]
+  proyecto_id integer [ref: > Proyecto.id]
+  accion varchar                            // Ejemplo: Revisado, Aprobado, Observado
+  observaciones text
+  fecha_creacion timestamp
+}

@@ -32,6 +32,6 @@ class Conectar
 
     public static function ruta()
     {
-        return "http://localhost/proyecto tesis/";
+        return "http://localhost/Proyecto_Tesis_UG/";
     }
 }
