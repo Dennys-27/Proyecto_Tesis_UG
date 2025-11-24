@@ -29,7 +29,7 @@
       </div>
 
       <button type="button" id="btnEnviarCorreo" class="btn btn-login text-white w-100">Enviar instrucciones</button>
-      <a href="index.html" class="btn btn-register w-100 mt-2 text-center">Volver al login</a>
+      <a href="index.php" class="btn btn-register w-100 mt-2 text-center">Volver al login</a>
     </form>
   </div>
 
@@ -77,3 +77,38 @@
   
 </body>
 </html>
+<script>
+document.getElementById("btnEnviarCorreo").addEventListener("click", function () {
+    let email = document.getElementById("email").value;
+
+    fetch("controller/AuthController.php?op=enviarCorreo", {
+        method: "POST",
+        body: new URLSearchParams({ email: email })
+    })
+    .then(async res => {
+        let texto = await res.text();  // Captura la respuesta tal cual
+        console.log("RESPUESTA RAW DEL SERVIDOR:", texto);
+
+        try {
+            return JSON.parse(texto);
+        } catch (e) {
+            console.error("❌ ERROR PARSEANDO JSON:", e);
+            throw e; // para que aparezca el error
+        }
+    })
+    .then(data => {
+        console.log("JSON OK:", data);
+
+        if (data.status === "ok") {
+            let modal = new bootstrap.Modal(document.getElementById("correoModal"));
+            modal.show();
+
+            document.getElementById("loadingSpinner").classList.add("d-none");
+            document.getElementById("successMessage").classList.remove("d-none");
+
+        } else {
+            alert(data.msg);
+        }
+    })
+});
+</script>

@@ -156,6 +156,7 @@ if ($datos["acceso"] == 1) {
                                                         <th>Permisos</th>
                                                         <th>Editar</th>
                                                         <th>Eliminar</th>
+                                                        <th>Activar</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -182,7 +183,7 @@ if ($datos["acceso"] == 1) {
                 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
                 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-                <script type="text/javascript" src="mntcategoria.js"></script>
+                <script type="text/javascript" src="mntroles.js"></script>
             </div>
         </div>
     </body>

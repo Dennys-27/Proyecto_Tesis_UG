@@ -2,18 +2,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="lbltitulo"></h5>
+                <h5 class="modal-title text-dark" id="lbltitulo"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
             </div>
             <form method="post" id="mantenimiento_form">
                 <div class="modal-body">
-                    <input type="hidden" name="cat_id" id="cat_id"/>
+                    <input type="hidden" name="id_rol" id="rol_id"/>
 
                     <div class="row gy-2">
                         <div class="col-md-12">
                             <div>
-                                <label for="valueInput" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="cat_nom" name="cat_nom" required/>
+                                <label for="valueInput" class="form-label text-dark">Nombre</label>
+                                <input type="text" class="form-control text-dark" id="nombre" name="nombre" required/>
                             </div>
                         </div>
                     </div>

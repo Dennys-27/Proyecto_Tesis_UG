@@ -1,64 +1,52 @@
 <?php
 require_once("../../config/conexion.php");
-require_once("../../models/Rol.php");
+require_once("../../models/Ticket.php");
 
+$ticket = new Ticket();
 
-$rol = new Rol();
-
-// Validar acceso al dashboard
-$datos = $rol->validar_acceso_rol($_SESSION["id_usuario"], "tickets");
+// Validar acceso del usuario a la sección tickets
+$datos = $ticket->validar_acceso($_SESSION["id_usuario"], "tickets");
 
 if ($datos["acceso"] == 1) {
-
 ?>
-    <!DOCTYPE html>
-    <html lang="es">
+<!DOCTYPE html>
+<html lang="es">
 
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Roles - Sistema de Gestión</title>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tickets | Sistema de Gestión</title>
 
-        <?php include '../html/head.php'; ?>
-        <style>
-            /* Botón con icono a la izquierda */
-            #btnnuevo {
-                padding: 0.5rem 1rem;
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                /* Icono y texto a la izquierda */
-                gap: 0.5rem;
-                /* Espacio entre icono y texto */
-                margin-bottom: 1rem;
-            }
+    <?php include '../html/head.php'; ?>
 
-            #btnnuevo .btn-icon {
-                width: 20px;
-                height: 20px;
-                flex-shrink: 0;
-            }
+    <style>
+         /* Botón general */
+        #btnnuevo {
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        #btnnuevo svg {
+            width: 20px;
+            height: 20px;
+        }
+        .badge-activo {
+            background: #28a745;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
 
-            /* Badges para estado */
-            .badge-estado {
-                display: inline-block;
-                padding: 0.35em 0.75em;
-                font-size: 0.85em;
-                font-weight: 600;
-                border-radius: 0.5rem;
-                color: #fff;
-                text-align: center;
-            }
+        .badge-cerrado {
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
 
-            .badge-estado.activo {
-                background-color: #28a745;
-            }
-
-            .badge-estado.inactivo {
-                background-color: #dc3545;
-            }
-
-            /* Botones con iconos SVG */
+        /* Botones con iconos SVG */
             .btn-icon svg {
                 width: 18px;
                 height: 18px;
@@ -100,98 +88,83 @@ if ($datos["acceso"] == 1) {
             .table-responsive {
                 overflow-x: auto;
             }
-        </style>
-    </head>
+    </style>
+</head>
 
-    <body>
-        <div class="app-shell">
-            <!-- SIDEBAR -->
-            <?php include '../html/sidebard.php'; ?>
+<body>
+    <div class="app-shell">
 
-            <!-- OVERLAY PARA MÓVIL -->
-            <div id="overlay"></div>
+        <?php include '../html/sidebard.php'; ?>
+        <div id="overlay"></div>
 
-            <!-- MAIN AREA -->
-            <div class="main-area">
-                <!-- NAVBAR / TOPBAR -->
-                <?php include '../html/header.php'; ?>
+        <div class="main-area">
+            <?php include '../html/header.php'; ?>
 
-                <!-- PAGE CONTENT -->
-                <main class="content">
-                    <div class="page-header">
-                        <h1>Tablero</h1>
-                        <p class="muted">
-                            Bienvenido al sistema de gestión — aquí tienes un resumen rápido.
-                        </p>
-                    </div>
+            <main class="content">
+                <div class="page-header">
+                    <h1>Gestión de Tickets</h1>
+                    <p class="muted">Administra los tickets registrados por los usuarios.</p>
+                </div>
 
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <!-- Botón Nuevo Registro -->
-                                <div class="card-header">
-                                    <button type="button" id="btnnuevo" class="btn btn-primary rounded-pill d-flex align-items-center justify-content-start">
-                                        <!-- Icono SVG -->
-                                        <svg class="btn-icon me-2" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                                        </svg>
-                                        Nuevo Registro
-                                    </button>
-                                </div>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
 
-                                <div class="card">
+                            <div class="card-header">
+                                <button type="button" id="btnnuevo" class="btn btn-primary rounded-pill">
+                                    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                                    Nuevo Ticket
+                                </button>
+                            </div>
 
-
-                                    <!-- Tabla responsive -->
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table id="table_data" class="table table-bordered table-striped align-middle">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nombre</th>
-                                                        <th>Descripcion</th>
-                                                        <th>Usuario Creacion</th>
-                                                        <th>Fecha Creacion</th>
-                                                        <th>Estado</th>
-                                                        <th>Permisos</th>
-                                                        <th>Editar</th>
-                                                        <th>Eliminar</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody></tbody>
-                                            </table>
-                                        </div>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="table_data" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Título</th>
+                                                    <th>Categoría</th>
+                                                    <th>Usuario</th>
+                                                    <th>Fecha</th>
+                                                    <th>Estado</th>
+                                                    <th>Ver</th>
+                                                    <th>Editar</th>
+                                                    <th>Eliminar</th>
+                                                    <th>Responder</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
-                </main>
+                </div>
 
+            </main>
 
-                <!-- FOOTER -->
-                <footer class="footer">
-                    <div>Universidad de Guayaquil — Ingeniería de Software</div>
-                    <div class="small muted">Diseñado por tu equipo • <span id="yearFooter"></span></div>
-                </footer>
+            <footer class="footer">
+                <div>Universidad de Guayaquil — Ingeniería de Software</div>
+                <div class="small muted"><span id="yearFooter"></span></div>
+            </footer>
 
-                <?php require_once("mantenimiento.php"); ?>
-                <script src="../assets/js/dashboard/create-proyecto.js"></script>
-                <script src="../assets/js/alertas.js"></script>
-                <!-- Quill -->
-                <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
-                <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+            <?php require_once("mantenimiento.php"); ?>
 
-                <script type="text/javascript" src="mntcategoria.js"></script>
-            </div>
+                            <script src="../../assets/js/dashboard/create-proyecto.js"></script>
+                <script src="../../assets/js/alertas.js"></script>
+            <script type="text/javascript" src="mtntickets.js"></script>
+
         </div>
-    </body>
+    </div>
+</body>
 
-    </html>
+</html>
 
 <?php
 } else {
-    // Redirigir si no tiene acceso
     header("Location:" . Conectar::ruta() . "views/404/");
     exit();
 }

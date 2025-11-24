@@ -80,6 +80,7 @@ if (isset($_POST["enviar"]) and $_POST["enviar"] == "si") {
                 <input type="password" id="clave" name="clave" class="form-control"
                     placeholder="Ingresa tu contraseña">
             </div>
+            roles 
 
             <div class="d-grid gap-2">
                 <button type="submit" name="enviar" value="si" class="btn btn-primary btn-lg">

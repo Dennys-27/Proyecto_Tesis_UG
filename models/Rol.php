@@ -24,43 +24,62 @@ class Rol extends Conectar
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function get_rol_combo()
+    {
+        $conectar = parent::Conexion();
+        $sql = "select id_rol, nombre from rol where estado = 1";
+        $query = $conectar->prepare($sql);
+
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /* TODO: Listar Registro por ID en especifico */
-        public function get_rol_x_rol_id($rol_id){
-            $conectar=parent::Conexion();
-            $sql="SP_L_ROL_02 ?";
-            $query=$conectar->prepare($sql);
-            $query->bindValue(1,$rol_id);
-            $query->execute();
-            return $query->fetchAll(PDO::FETCH_ASSOC);
-        }
+public function get_rol_x_rol_id($rol_id){
+    $conectar = parent::Conexion();
+    $sql = "CALL SP_L_ROL_02(?)";
+    $query = $conectar->prepare($sql);
+    $query->bindValue(1, $rol_id, PDO::PARAM_INT);
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
 
-        /* TODO: Eliminar o cambiar estado a eliminado */
-        public function delete_rol($rol_id){
-            $conectar=parent::Conexion();
-            $sql="SP_D_ROL_01 ?";
-            $query=$conectar->prepare($sql);
-            $query->bindValue(1,$rol_id);
-            $query->execute();
-        }
+/* TODO: Eliminar o cambiar estado a eliminado */
+public function eliminar_rol($rol_id){
+    $conectar = parent::Conexion();
+    $sql = "update rol set estado = 0 where id_rol = ?";
+    $query = $conectar->prepare($sql);
+    $query->bindValue(1, $rol_id, PDO::PARAM_INT);
+    $query->execute();
+}
 
-        /* TODO: Registro de datos */
-        public function insert_rol($suc_id,$rol_nom){
-            $conectar=parent::Conexion();
-            $sql="SP_I_ROL_01 ?,?";
-            $query=$conectar->prepare($sql);
-            $query->bindValue(1,$suc_id);
-            $query->bindValue(2,$rol_nom);
-            $query->execute();
-        }
+public function activar_rol($rol_id){
+    $conectar = parent::Conexion();
+    $sql = "update rol set estado = 1 where id_rol = ?";
+    $query = $conectar->prepare($sql);
+    $query->bindValue(1, $rol_id, PDO::PARAM_INT);
+    $query->execute();
+}
 
-        /* TODO:Actualizar Datos */
-        public function update_rol($rol_id,$suc_id,$rol_nom){
-            $conectar=parent::Conexion();
-            $sql="SP_U_ROL_01 ?,?,?";
-            $query=$conectar->prepare($sql);
-            $query->bindValue(1,$rol_id);
-            $query->bindValue(2,$suc_id);
-            $query->bindValue(3,$rol_nom);
-            $query->execute();
-        }
+/* INSERTAR ROL */
+public function insert_rol($rol_nom){
+    $conectar = parent::Conexion();
+    $sql = "INSERT INTO rol (nombre) VALUES (?)";
+    $query = $conectar->prepare($sql);
+    $query->bindValue(1, $rol_nom, PDO::PARAM_STR);
+    $query->execute();
+}
+
+
+/* ACTUALIZAR ROL */
+public function update_rol($rol_id,  $rol_nom){
+    $conectar = parent::Conexion();
+    $sql = "UPDATE rol SET nombre = ? WHERE id_rol = ?";
+    $query = $conectar->prepare($sql);
+    $query->bindValue(1, $rol_nom, PDO::PARAM_STR);
+    $query->bindValue(2, $rol_id, PDO::PARAM_INT);
+    $query->execute();
+}
+
 }

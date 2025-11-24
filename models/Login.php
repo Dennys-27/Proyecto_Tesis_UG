@@ -55,68 +55,77 @@ class Login extends Conectar
 
 
     public function register()
-    {
-        $conectar = parent::Conexion();
-        parent::set_names();
+{
+    $conectar = parent::Conexion();
+    parent::set_names();
 
-        if (isset($_POST["enviar"])) {
-            $nombres   = trim($_POST["nombres"]);
-            $apellidos = trim($_POST["apellidos"]);
-            $correo    = trim($_POST["correo"]);
-            $clave     = trim($_POST["clave"]);
-            $usuario     = trim($_POST["usuario"]);
-            $cedula     = trim($_POST["cedula"]);
-            $id_rol    = 2; // 👈 siempre rol administrador
+    if (isset($_POST["enviar"]) && $_POST["enviar"] == "si") {
 
-            // Validar campos vacíos
-            if (empty($correo) || empty($clave) || empty($nombres) || empty($apellidos) || empty($usuario) || empty($cedula)) {
-                header("Location: " . Conectar::ruta() . "registrar.php?m=2");
-                exit();
-            }
+        $nombres   = trim($_POST["nombres"]);
+        $apellidos = trim($_POST["apellidos"]);
+        $correo    = trim($_POST["correo"]);
+        $clave     = trim($_POST["clave"]);
+        $usuario   = trim($_POST["usuario"]);
+        $cedula    = trim($_POST["cedula"]);
+        $id_rol    = isset($_POST['rol']) ? intval($_POST['rol']) : 0;
 
-            // Validar si ya existe el usuario
-            $sql = "SELECT * FROM usuario WHERE correo = ?";
-            $stmt = $conectar->prepare($sql);
-            $stmt->bindValue(1, $correo);
-            $stmt->execute();
-            $usuarioExistente = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($usuarioExistente) {
-                // Usuario ya registrado
-                header("Location: " . Conectar::ruta() . "registrar.php?m=1");
-                exit();
-            } else {
-                // Registrar usuario
-                $hashPassword = password_hash($clave, PASSWORD_DEFAULT);
-
-                $insertSql = "INSERT INTO usuario 
-                (nombres, apellidos, correo, clave, id_rol, fecha_creacion, estado, imagen, usuario, cedula)
-                VALUES (?, ?, ?, ?, ?, NOW(), 1, 'user-dummy-img.jpg', ?, ?)";
-                $insertStmt = $conectar->prepare($insertSql);
-                $insertStmt->bindValue(1, $nombres);
-                $insertStmt->bindValue(2, $apellidos);
-                $insertStmt->bindValue(3, $correo);
-                $insertStmt->bindValue(4, $hashPassword);
-                $insertStmt->bindValue(5, $id_rol);
-                $insertStmt->bindValue(6, $usuario);
-                $insertStmt->bindValue(7, $cedula);
-                $insertStmt->execute();
-
-                // Iniciar sesión automática
-                $id_usuario = $conectar->lastInsertId();
-
-                $_SESSION["id_usuario"] = $id_usuario;
-                $_SESSION["nombres"] = $nombres;
-                $_SESSION["apellidos"] = $apellidos;
-                $_SESSION["id_rol"] = $id_rol; // 👈 siempre será 1
-                $_SESSION["correo"] = $correo;
-                $_SESSION["usu_img"] = 'user-dummy-img.jpg';
-                $_SESSION["usuario"] = $usuario;
-                $_SESSION["cedula"] = $cedula;
-
-                header("Location: " . Conectar::ruta() . "views/home");
-                exit();
-            }
+        // Validar campos vacíos y rol seleccionado
+        if (
+            empty($correo) || empty($clave) || empty($nombres) ||
+            empty($apellidos) || empty($usuario) || empty($cedula) ||
+            $id_rol <= 0
+        ) {
+            header("Location: " . Conectar::ruta() . "registrar.php?m=2");
+            exit();
         }
+
+        // Verificar si el correo ya existe
+        $sql = "SELECT * FROM usuario WHERE correo = ?";
+        $stmt = $conectar->prepare($sql);
+        $stmt->bindValue(1, $correo);
+        $stmt->execute();
+        $usuarioExistente = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($usuarioExistente) {
+            header("Location: " . Conectar::ruta() . "registrar.php?m=1");
+            exit();
+        }
+
+        // Insertar usuario
+        $hashPassword = password_hash($clave, PASSWORD_DEFAULT);
+
+        $insertSql = "INSERT INTO usuario 
+            (nombres, apellidos, correo, clave, id_rol, fecha_creacion, estado, imagen, usuario, cedula)
+            VALUES (?, ?, ?, ?, ?, NOW(), 1, 'user-dummy-img.jpg', ?, ?)";
+
+        $insertStmt = $conectar->prepare($insertSql);
+        $insertStmt->execute([
+            $nombres,
+            $apellidos,
+            $correo,
+            $hashPassword,
+            $id_rol,
+            $usuario,
+            $cedula
+        ]);
+
+        // Crear sesión automáticamente
+        $id_usuario = $conectar->lastInsertId();
+
+        $_SESSION["id_usuario"] = $id_usuario;
+        $_SESSION["nombres"]    = $nombres;
+        $_SESSION["apellidos"]  = $apellidos;
+        $_SESSION["id_rol"]     = $id_rol;
+        $_SESSION["correo"]     = $correo;
+        $_SESSION["usu_img"]    = 'user-dummy-img.jpg';
+        $_SESSION["usuario"]    = $usuario;
+        $_SESSION["cedula"]     = $cedula;
+
+        header("Location: " . Conectar::ruta() . "views/home");
+        exit();
     }
+}
+
+
+
 }

@@ -45,7 +45,7 @@ $(document).ready(function () {
 
         // Llamada AJAX
         ajax: {
-            url: "../../controller/rol.php?op=listar",
+            url: "../../controller/usuario.php?op=listar",
             type: "post",
             dataType: "json",
             error: function (e) {

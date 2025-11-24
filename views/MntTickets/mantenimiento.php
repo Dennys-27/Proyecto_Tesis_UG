@@ -1,29 +1,60 @@
-<div id="modalmantenimiento" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="lbltitulo"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
-            </div>
-            <form method="post" id="mantenimiento_form">
-                <div class="modal-body">
-                    <input type="hidden" name="cat_id" id="cat_id"/>
+<div id="modalmantenimiento" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <form id="ticket_form" autocomplete="off">
+            <div class="modal-content shadow-lg">
 
-                    <div class="row gy-2">
-                        <div class="col-md-12">
-                            <div>
-                                <label for="valueInput" class="form-label">Nombre</label>
-                                <input type="text" class="form-control" id="cat_nom" name="cat_nom" required/>
-                            </div>
+                <!-- HEADER -->
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold" id="lbltitulo">Nuevo Ticket</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- BODY -->
+                <div class="modal-body">
+
+                    <input type="hidden" id="ticket_id" name="ticket_id">
+
+                    <div class="row g-3">
+
+                        <!-- Titulo -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark">Título *</label>
+                            <input type="text" class="form-control" id="titulo" name="titulo" required>
                         </div>
+
+                        <!-- Categoría -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold text-dark">Categoría *</label>
+                            <select class="form-control" id="categoria" name="categoria" required>
+                                <option value="">Seleccione</option>
+                                <option value="Soporte">Soporte</option>
+                                <option value="Sistema">Sistema</option>
+                                <option value="Base de Datos">Base de Datos</option>
+                                <option value="Redes">Redes</option>
+                            </select>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold text-dark">Descripción *</label>
+                            <textarea class="form-control" rows="5" id="descripcion" name="descripcion" required></textarea>
+                        </div>
+
                     </div>
 
                 </div>
+
+                <!-- FOOTER -->
                 <div class="modal-footer">
-                    <button type="reset" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" name="action" value="add" class="btn btn-primary ">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Guardar
+                    </button>
                 </div>
-            </form>
-        </div>
+
+            </div>
+        </form>
     </div>
 </div>
